@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int sumatoria(int iteracion, int x, int y)
+{
+  printf("x%d: #%p\n", iteracion, &x);
+  printf("y%d: #%p\n", iteracion, &y);
+
+  if (x==y) {
+    return y;
+  }
+
+  return x + sumatoria(iteracion+1, x+1, y);
+}
+
+int main()
+{
+  int a = 1;
+  int b = 5;
+
+  int c = sumatoria(1, a, b);
+   
+  printf("sumatoria %d -> %d = %d\n", a, b, c);
+
+  printf("main: #%p\n", main);
+  printf("suma: #%p\n", sumatoria);
+  printf("a: #%p\n", &a);
+  printf("b: #%p\n", &b);
+
+  return 0;
+}
