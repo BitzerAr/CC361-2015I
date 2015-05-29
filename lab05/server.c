@@ -30,7 +30,7 @@ int main(int argc , char *argv[])
         perror("bind fallo. Error");
         return 1;
     }
-    puts("bind done");
+    puts("bind creado");
      
     //Listen - Escuchamos sobre el socket
     listen(socket_desc , 3);
