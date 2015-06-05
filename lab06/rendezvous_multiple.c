@@ -20,16 +20,23 @@ void * imprimirB() {
 	printf("--- B2\n");
 }
 
+void * imprimirC() {
+	printf("--- C1\n");
+	printf("--- C2\n");
+}
+
 void main()
 {
     pthread_t thread_a;
     pthread_t thread_b;
+    pthread_t thread_c;
 
     sem_init(&semA, 0, 0);
     sem_init(&semB, 0, 0);
 
-    pthread_create(&thread_b, NULL, imprimirB, NULL);
     pthread_create(&thread_a, NULL, imprimirA, NULL);
+    pthread_create(&thread_b, NULL, imprimirB, NULL);
+    pthread_create(&thread_c, NULL, imprimirC, NULL);
 
     pthread_join(thread_a, NULL);
     pthread_join(thread_b, NULL);

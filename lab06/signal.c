@@ -22,8 +22,8 @@ void main()
 
     sem_init(&sem, 0, 0);
 
-    pthread_create(&thread_b, NULL, imprimirB, NULL);
-    pthread_create(&thread_a, NULL, imprimirA, NULL);
+    pthread_create(&thread_b, NULL, imprimirA, NULL);
+    pthread_create(&thread_a, NULL, imprimirB, NULL);
 
     pthread_join(thread_a, NULL);
     pthread_join(thread_b, NULL);
