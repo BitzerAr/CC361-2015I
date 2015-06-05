@@ -5,7 +5,8 @@
 
 int contador = 0;
 sem_t mutex;
-sem_t barrera;
+sem_t torniquete1;
+sem_t torniquete2;
 
 void * imprimirA() {
 	while(1){
@@ -14,14 +15,29 @@ void * imprimirA() {
 		// Inicio Patron Barrera
 	        sem_wait(&mutex);
 		contador++;
+   		if(contador == 3) {
+			sem_wait(&torniquete2);
+			sem_post(&torniquete1); 
+			printf("abrimos la barrera\n");
+		}
 	        sem_post(&mutex);
-	
-		if (contador == 3) sem_post(&barrera);
-	
-		sem_wait(&barrera);
-		sem_post(&barrera);
+
+	        sem_wait(&torniquete1);
+	        sem_post(&torniquete1);
 		// Fin Patron Barrera
 		printf("--- A2\n");
+		// Inicio Patron Barrera
+	        sem_wait(&mutex);
+		contador--;
+   		if(contador == 0) {
+			sem_wait(&torniquete1);
+			sem_post(&torniquete2); 
+		}
+	        sem_post(&mutex);
+
+		sem_wait(&torniquete2);
+		sem_post(&torniquete2); 
+		// Fin Patron Barrera
 	}
 }
 
@@ -30,16 +46,31 @@ void * imprimirB() {
 		sleep(2);
 		printf("--- B1\n");
 		// Inicio Patron Barrera
-        	sem_wait(&mutex);
+	        sem_wait(&mutex);
 		contador++;
-        	sem_post(&mutex);
+   		if(contador == 3) {
+			sem_wait(&torniquete2);
+			sem_post(&torniquete1); 
+			printf("abrimos la barrera\n");
+		}
+	        sem_post(&mutex);
 
-		if (contador == 3) sem_post(&barrera);
-
-		sem_wait(&barrera);
-		sem_post(&barrera);
+	        sem_wait(&torniquete1);
+	        sem_post(&torniquete1);
 		// Fin Patron Barrera
 		printf("--- B2\n");
+		// Inicio Patron Barrera
+	        sem_wait(&mutex);
+		contador--;
+   		if(contador == 0) {
+			sem_wait(&torniquete1);
+			sem_post(&torniquete2); 
+		}
+	        sem_post(&mutex);
+
+		sem_wait(&torniquete2);
+		sem_post(&torniquete2); 
+		// Fin Patron Barrera
 	}
 }
 
@@ -50,14 +81,29 @@ void * imprimirC() {
 		// Inicio Patron Barrera
 	        sem_wait(&mutex);
 		contador++;
+   		if(contador == 3) {
+			sem_wait(&torniquete2);
+			sem_post(&torniquete1); 
+			printf("abrimos la barrera\n");
+		}
 	        sem_post(&mutex);
-	
-		if (contador == 3) sem_post(&barrera);
-	
-		sem_wait(&barrera);
-		sem_post(&barrera);
+
+	        sem_wait(&torniquete1);
+	        sem_post(&torniquete1);
 		// Fin Patron Barrera
 		printf("--- C2\n");
+		// Inicio Patron Barrera
+	        sem_wait(&mutex);
+		contador--;
+   		if(contador == 0) {
+			sem_wait(&torniquete1);
+			sem_post(&torniquete2); 
+		}
+	        sem_post(&mutex);
+
+		sem_wait(&torniquete2);
+		sem_post(&torniquete2); 
+		// Fin Patron Barrera
 	}
 }
 
@@ -68,7 +114,8 @@ void main()
     pthread_t thread_c;
 
     sem_init(&mutex, 0, 1);
-    sem_init(&barrera, 0, 0);
+    sem_init(&torniquete1, 0, 0);
+    sem_init(&torniquete2, 0, 1);
 
     pthread_create(&thread_a, NULL, imprimirA, NULL);
     pthread_create(&thread_b, NULL, imprimirB, NULL);
